@@ -1,0 +1,53 @@
+.circle-container {
+    position: relative;
+    /* 1 */
+    width: 14em;
+    height: 14em;
+    padding: 0;
+    border-radius: 50%;
+    list-style: none;
+    /* 2 */
+    box-sizing: content-box;
+    /* 3 */
+    margin: 6em auto 0;
+    border: solid 1px tomato;
+  }
+  .circle-container > * {
+    /* 4 */
+    display: block;
+    position: absolute;
+    top: 53%;
+    left: 53%;
+    width: 2em;
+    height: 2em;
+    margin: -2em;
+  }
+  .circle-container > :nth-of-type(1) {
+    transform: rotate(30deg) translate(7em) rotate(-30deg);
+  }
+  .circle-container > :nth-of-type(2) {
+    transform: rotate(90deg) translate(7em) rotate(-90deg);
+  }
+  .circle-container > :nth-of-type(3) {
+    transform: rotate(150deg) translate(7em) rotate(-150deg);
+  }
+  .circle-container > :nth-of-type(4) {
+    transform: rotate(210deg) translate(7em) rotate(-210deg);
+  }
+  .circle-container > :nth-of-type(5) {
+    transform: rotate(270deg) translate(7em) rotate(-270deg);
+  }
+  .circle-container > :nth-of-type(6) {
+    transform: rotate(330deg) translate(7em) rotate(-330deg);
+  }
+
+  .circle-container img {
+    display: block;
+    /* img size */
+    width: 125%;
+    border-radius: 50%;
+  }
+
+  .circle-container li:last-child img {
+    transform: scale(1.5);
+  }
