@@ -5,24 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="google">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- <style id="__________cytoscape_stylesheet">.__________cytoscape_container { position: relative; }</style> -->
-    <!--import d3 library-->
-    <!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
-    <!--import svg-->
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" ></svg>
+
     <!-- import cytpscape-->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script> -->
+    <!-- inclde html2canvas for screenshot -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
 
     <!-- css -->
-    <link href="{{ url_for('static',filename='circle.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static',filename='concertric.css') }}" rel="stylesheet" />
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
 </head>
-<body>
-    <!-- 讀取json資料-->
-    <ul class="circle-container" >
-        {% for key in data.keys() %}
-            <li><img src ="{{data[key].url}}"></li>
-        {%endfor%}
-    </ul>
+<body >
+
+    <div class="container">
+        <div class="left_side">
+            <div class="circle" >
+                <div class="circle2">
+                    {% for key in range(0,15) %}
+                        <p><img src ="{{data.twitter[key].url}}"></p>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="right_side">
+            <div class="tab">
+                <input type="checkbox" name="order1" id="order1">
+                <label for="order1">
+                    <h1>Circle1</h1>
+                </label>
+                <div class="username">
+                    {% for key in range(0,6) %}
+                        <li>{{data.twitter[key].username}}</li><br>
+                    {%endfor%}
+                </div>
+            </div>
+            <div class="tab">
+                <input type="checkbox" name="order2" id="order2">
+                <label for="order2">
+                    <h1>Circle2</h1>
+                </label>
+                <div class="username">
+                    {% for key in range(6,15) %}
+                        <li>{{data.twitter[key].username}}</li><br>
+                    {%endfor%}
+                </div>
+            </div>
+            <div>
+                <form action="{{url_for('detail')}}">
+                    <input type="submit" value="Click" />
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
 </body>
 </html>

@@ -1,0 +1,177 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body
+{
+    background-color: lightblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.container
+{
+    position: relative;
+    width: 100%;
+    max-width: 1600px;
+    min-height: 750px;
+    background-color: #fff;
+    margin: 30px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+.container .left_side
+{
+    position: relative;
+    background-color: #fff;
+}
+
+.circle
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    left: 4em;
+    top: 3em;
+    width: 40em;
+    height: 40em;
+    padding: 0em;
+    margin: 0em;
+    border-radius: 50%;
+    border: 1px solid #000;
+    box-sizing: border-box;
+}
+.circle2
+{
+    position: absolute;
+    left: 8em;
+    top: 8em;
+    width: 24em;
+    height: 24em;
+    padding: 0em;
+    margin: 0em ;
+    border-radius: 50%;
+    border: solid 1px #000;
+    box-sizing: border-box;
+}
+
+.circle2 >:nth-of-type(1){
+    transform: rotate(0deg) translate(12em) rotate(0deg);
+}
+.circle2  > :nth-of-type(2) {
+    transform: rotate(60deg) translate(12em) rotate(-60deg);
+}
+.circle2  > :nth-of-type(3) {
+    transform: rotate(120deg) translate(12em) rotate(-120deg);
+}
+.circle2  > :nth-of-type(4) {
+    transform: rotate(180deg) translate(12em) rotate(-180deg);
+}
+.circle2  > :nth-of-type(5) {
+    transform: rotate(240deg) translate(12em) rotate(-240deg);
+}
+.circle2  > :nth-of-type(6) {
+    transform: rotate(300deg) translate(12em) rotate(-300deg);
+}
+
+.circle2  > :nth-of-type(7) {
+    transform: rotate(40deg) translate(20em) rotate(-40deg);
+}
+.circle2  > :nth-of-type(8) {
+    transform: rotate(85deg) translate(20em) rotate(-85deg);
+}
+.circle2  > :nth-of-type(9) {
+    transform: rotate(130deg) translate(20em) rotate(-130deg);
+}
+.circle2  > :nth-of-type(10) {
+    transform: rotate(175deg) translate(20em) rotate(-175deg);
+}
+.circle2  > :nth-of-type(11) {
+    transform: rotate(220deg) translate(20em) rotate(-220deg);
+}
+.circle2  > :nth-of-type(12) {
+    transform: rotate(265deg) translate(20em) rotate(-265deg);
+}
+.circle2  > :nth-of-type(13) {
+    transform: rotate(310deg) translate(20em) rotate(-310deg);
+}
+.circle2  > :nth-of-type(14) {
+    transform: rotate(355deg) translate(20em) rotate(-355deg);
+}
+.circle2 img
+{
+    display: block;
+    position: absolute;
+    left: 10em;
+    top:10em;
+    width: 5em;
+    height: 5em;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px lightsalmon;
+    box-sizing: border-box;
+}
+.circle2 img:hover
+{
+    box-shadow: 0 0 0 4px lightseagreen;
+    transform: scale(1.2);
+
+}
+
+
+
+.container .right_side
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: lightsalmon;
+    padding: 40px;
+}
+.container .tab
+{
+    position: relative;
+    background-color: #fff;
+    padding: 0 20px 20px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.container .tab input
+{
+    appearance: none;
+}
+.container .tab label{
+    display: flex;
+    align-items: center;
+}
+.container .tab label::after
+{
+    content: '=';
+    position: absolute;
+    right: 20px;
+    font-size: 2em;
+    color: rgb(0,0,0, 0.1);
+}
+.container .tab:hover label::after{
+    color: #333;
+}
+.container .tab .username
+{
+    max-height: 0;
+    transition: 1s;
+    overflow: hidden;
+}
+.container .tab input:checked ~ .username
+{
+    max-height: 100vh;
+}
+.container .tab .username li
+{
+    position: relative;
+    padding: 10px 0;
+    list-style: decimal;
+    color: #333;
+
+}

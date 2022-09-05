@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="google">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- import cytpscape-->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script> -->
+    <!-- inclde html2canvas for screenshot -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
+
+    <!-- css -->
+    <!--link href="../static/concertricpage3.css" rel="stylesheet" /-->
+    <link href="{{ url_for('static',filename='concertricpage3.css') }}" rel="stylesheet" />
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+</head>
+<body >
+
+    <div class="container">
+        <div class="left_side">
+            
+                <div class="circle2">
+                    {% for key in range(0,1) %}
+                        <!--p><img src ="{{data.twitter[key].url}}"></p-->
+                        <a href="http://127.0.0.1:5000/index" title="測試超連結"><img src ="{{data.twitter[key].username}}" alt="測試圖片" border="0"></a>
+                    {%endfor%}
+                </div>
+                <!--div class="circle2">    
+                        <p><img src ="https://pbs.twimg.com/profile_images/1511657309692342273/lUd6Y4uj_400x400.jpg"></p>
+    
+                </div-->
+                <div class="text1">
+                    <p> 
+                        Name: {{data.twitter[1].name}}<br>
+                        Username: {{data.twitter[1].username}}<br>
+
+
+                    </p>
+                </div>
+                <div class="sum" >
+                    <p>
+                        <!--h1 style="font-size:30px;"><i class="fa-light fa-comment"></i> Reply</h1><h1></h1>
+                        <i class="fa-light fa-comment"></i-->
+                        <img src ="{{icon.icon[0].like}}">  Like: {{data.twitter[16].liking}} times <br>
+                        <img src ="{{icon.icon[0].reply}}">  Reply: {{data.twitter[16].reply}} times <br>
+                        <img src ="{{icon.icon[0].retweet}}">  Retweet: {{data.twitter[16].retweet}} times <br>
+                    </p>
+                        
+                    
+                </div>
+                <div class="sum_graph1">
+                    <!--p><img src="../image/0.png" rel="stylesheet"/>
+                    </p-->
+                </div>
+                <div class="sum_graph2">
+                    <!--p>{{graph.graph[0].a}}></p-->
+                    <!--p><img src="../image/0c.png" rel="stylesheet"/></p-->
+                </div>
+            
+            
+        </div>
+
+
+        <div class="right_side">
+            <div class="tab">
+                <input type="checkbox" name="order1" id="order1">
+                <label for="order1">
+                    <h1>Relevant User</h1>
+                </label>
+                <div class="username">
+                    {% for key in range(0,14) %}
+                        <li>{{data.twitter[key].username}}</li><br>
+                    {%endfor%}
+                </div>
+            </div>
+            <!--div class="tab">
+                <input type="checkbox" name="order2" id="order2">
+                <label for="order2">
+                    <h1>Circle2</h1>
+                </label>
+                <div class="username">
+                    {% for key in range(6,14) %}
+                        <li>{{data.twitter[key].username}}</li><br>
+                    {%endfor%}
+                </div>
+            </div-->
+            <div>
+                <form action="{{url_for('detail')}}">
+                    <input type="submit" value="Click" />
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+</html>

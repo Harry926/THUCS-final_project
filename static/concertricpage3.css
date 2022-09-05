@@ -1,0 +1,163 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body
+{
+    background-color: lightblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.container
+{
+    position: relative;
+    width: 100%;
+    
+    max-width: 1600px;
+    min-height: 750px;
+    background-color: #fff;
+    margin: 30px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+.container .left_side
+{
+    position: relative;
+    background-color: #fff;
+    
+    /* padding: 40px; */
+}
+
+
+.circle2 img
+{
+    display: block;
+    /* position 讓圖都在同一點上 left跟top調整到圓心 */
+    position: absolute;
+    left: 2em;
+    top:2em;
+    /* image size r= */
+    width: 8em;
+    height: 8em;
+    border-radius: 50%;
+    /* border: 2px solid #000; */
+    box-shadow: 0 0 0 3px lightsalmon;
+    box-sizing: border-box;
+}
+
+.circle2 img:hover
+{
+    box-shadow: 0 0 0 2px #658bb2;
+    transform: scale(1.1);
+
+}
+.circle2 p
+{
+    font-size: 30px;
+}
+.text1 p
+{
+    position: absolute;
+    font-size: 40px;
+    left: 500px;
+    top: 50px
+}
+.sum 
+{
+    position: absolute;
+    font-size: 30px;
+    left: 500px;
+    top: 150px;
+    border-width: 5px;
+    width: 500px;
+    height: 100px;
+    border-collapse: collapse;
+}
+.sum img{
+    position: relative;
+    top: 10px;
+    left: 0px;
+    width: 50px;
+    height: 50px;
+}
+.fa-light fa-comment{
+    position: relative;
+    top: 10px;
+    left: 0px;
+    width: 50px;
+    height: 50px;
+}
+.sum_graph1 img{
+    display:block;
+    position: absolute;
+    width: 30em;
+    height: 20em;
+    left: 2em;
+    bottom: 2em;
+}
+.sum_graph2 img{
+    display:block;
+    position: absolute;
+    width: 30em;
+    height: 22em;
+    right: 2em;
+    bottom: 2em;
+}
+.container .right_side
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: lightsalmon;
+    padding: 40px;
+}
+.container .tab
+{
+    position: relative;
+    background-color: #fff;
+    padding: 0 20px 20px;
+    border-radius: 5px;
+    overflow: hidden;
+    font-size: 15px;
+}
+.container .tab input
+{
+    appearance: none;
+}
+.container .tab label{
+    display: flex;
+    align-items: center;
+}
+.container .tab label::after
+{
+    content: '=';
+    position: absolute;
+    right: 20px;
+    font-size: 2em;
+    color: rgb(0,0,0, 0.1);
+}
+.container .tab:hover label::after{
+    color: #333;
+}
+.container .tab .username
+{
+    max-height: 0;
+    transition: 1s;
+    overflow: hidden;
+}
+.container .tab input:checked ~ .username
+{
+    max-height: 100vh;
+}
+.container .tab .username li
+{
+    position: relative;
+    padding: 10px 0;
+    list-style: decimal;
+    color: #333;
+
+}
