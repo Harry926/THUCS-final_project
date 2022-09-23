@@ -2,35 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="google">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <!-- import cytpscape-->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script> -->
-    <!-- inclde html2canvas for screenshot -->
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
-
     <!-- css -->
-    <link href="{{ url_for('static',filename='concertric.css') }}" rel="stylesheet" />
-    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link href="{{ url_for('static',filename='concertric.css') }}" rel="stylesheet">
 
 </head>
-<body >
-
-    <div class="container">
+<body>
+    <!-- 關係的圓圈 第二頁 -->
+    <div class="container" id="main_container">
         <div class="left_side">
             <div class="circle" >
-                <div class="circle2">
+                <div class="circle2" >
                     {% for key in range(0,15) %}
-                        <p><img src ="{{data.twitter[key].url}}"></p>
+                        <p><img id="color{{key}}" src ="{{data.twitter[key].url}}" onclick="openDetailPage('{{data.twitter[key].id}}')"></p>
                     {%endfor%}
                 </div>
             </div>
         </div>
 
-
         <div class="right_side">
+            <div class="tab">
+                <input type="checkbox" name="instruction" id="instruction">
+                <label for="instruction">
+                    <h2>使用說明</h2>
+                </label>
+                <div class="content">
+                    <p>使用說明文字測試測試<br>換行測試<br></p>
+                </div>
+                <!-- 選顏色的input -->
+                <input class="no-appereance" type="color" value="#ff0000" action="changeRingColor()" id="colorPicker">
+                <input type="button" onclick="updateRingColor()" value="mood color">
+            </div>
+
             <div class="tab">
                 <input type="checkbox" name="order1" id="order1">
                 <label for="order1">
@@ -42,26 +48,92 @@
                     {%endfor%}
                 </div>
             </div>
+
             <div class="tab">
                 <input type="checkbox" name="order2" id="order2">
                 <label for="order2">
                     <h1>Circle2</h1>
                 </label>
                 <div class="username">
-                    {% for key in range(6,15) %}
+                    {% for key in range(6,14) %}
                         <li>{{data.twitter[key].username}}</li><br>
                     {%endfor%}
                 </div>
             </div>
+
+            <!-- buttom for link to detail page -->
             <div>
-                <form action="{{url_for('detail')}}">
-                    <input type="submit" value="Click" />
-                </form>
+                <input type="submit" value="Click" onclick="openDetailPage()">
             </div>
+
         </div>
 
     </div>
-
+    <!-- 更詳細的內容 -->
+    <div class="detail_container_hidden" id="detail_container">
+        <input type="button" onclick="closeDetailPage()" value="home page">
+    </div>
 
 </body>
+
+<script>
+    var parsed = JSON.parse('{{data.twitter | tojson}}');
+    var colorInput = document.getElementById("colorPicker");
+
+    // 自由改變照片外框顏色
+    function changeRingColor(){
+        colorInput.addEventListener('input', ()=>{
+            let color = colorInput.value;
+            for(var i=0; i<parsed.length; i++){
+                document.getElementById("color" + i).style.boxShadow ="0 0 0 4px" + color;
+            }
+        })
+    }
+
+    var happyColor = "0 0 0 4px #f3c058";
+    var normalColor = "0 0 0 4px #8fa3fb";
+    var angryColor = "0 0 0 4px #ff586b";
+    var sorrowColor = "0 0 0 4px #d958ff";
+
+    // 依情緒改變照片外框顏色
+    function updateRingColor()
+    {
+        for(var i=0; i < parsed.length; i++)
+        {
+            var sentiment =parsed[i]["sentiment"]
+            var boxShadow = "";
+            if(sentiment == "happy")
+            {
+                boxShadow = happyColor;
+            }else if(sentiment == "normal")
+            {
+                boxShadow = normalColor;
+            }else if(sentiment == "angry")
+            {
+                boxShadow = angryColor;
+            }else if(sentiment == "sorrow")
+            {
+                boxShadow = sorrowColor;
+            }
+            document.getElementById("color" + i).style.boxShadow = boxShadow;
+        }
+    }
+
+    // 關閉第二頁 開啟更詳細的頁面
+    function openDetailPage(id){
+        document.getElementById("main_container").className = "container_hidden";
+        document.getElementById("detail_container").className = "detail_container";
+        console.log(id);
+
+    }
+
+    // 開啟第二頁 關閉更詳細的頁面
+    function closeDetailPage(){
+        document.getElementById("main_container").className = "container";
+        document.getElementById("detail_container").className = "detail_container_hidden";
+    }
+
+    updateRingColor();
+    changeRingColor();
+</script>
 </html>

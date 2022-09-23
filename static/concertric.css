@@ -22,6 +22,16 @@ body
     display: grid;
     grid-template-columns: 3fr 1fr;
 }
+.container_hidden
+{
+    display: none;
+}
+.detail_container_hidden
+{
+    display: none;
+}
+
+
 .container .left_side
 {
     position: relative;
@@ -112,12 +122,11 @@ body
     box-shadow: 0 0 0 3px lightsalmon;
     box-sizing: border-box;
 }
-.circle2 img:hover
+/* .circle2 img:hover
 {
     box-shadow: 0 0 0 4px lightseagreen;
     transform: scale(1.2);
-
-}
+} */
 
 
 
@@ -140,7 +149,7 @@ body
 }
 .container .tab input
 {
-    appearance: none;
+    /* appearance: none; */
 }
 .container .tab label{
     display: flex;
