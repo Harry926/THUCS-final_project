@@ -41,7 +41,7 @@
 
                 <div class="timeline" id='timeline' style="overflow:auto; overflow-x: hidden">
                     <!-- 篇數號碼是用迴圈變數 -->
-                    {% for i in range(0, 1000) %}
+                    {% for i in range(0, data.count) %}
                         <article id="tweet_{{i+1}}">
                             <h3 id="{{data.twitter[i].username}}"><a href="http://twitter.com/Twitter/status/{{data.twitter[i].id}}" target="_blank">{{i+1}}. Tweet id:{{data.twitter[i].id}}</a></h3>
                             <span><b>Tweet by:{{data.twitter[i].name}}</b></span>
@@ -58,6 +58,11 @@
                 <div class="chart_box" >
                     <canvas id="pie_chart"></canvas>
                 </div>
+
+                <div class="chart_box" >
+                    <canvas id="line_chart" class="line_chart"></canvas>
+                </div>
+
             </div>
 
         </div>
@@ -65,15 +70,19 @@
 </body>
 <script>
     // ensure data parsed
+    var parsed_data = JSON.parse('{{data.data | tojson}}');
+    var parsed_LineData = JSON.parse('{{data.line_data | tojson}}');
     var parsed = JSON.parse('{{data | tojson}}');
+
     console.log('parsed work');
 
-    // creat chart
+    var date = parsed_LineData[1];
+    // creat Pie chart
     var data = {
         labels: ['happy','angry', 'sorrow',  'normal'],
         datasets:[{
         label: 'pie',
-        data: parsed.data,
+        data: parsed_data,
         backgroundColor: [
             'rgba(255, 206, 86, 0.35)',
             'rgba(255, 26, 104, 0.35)',
@@ -88,8 +97,29 @@
         ],
         borderWidth: 1
         }]
-
     };
+
+    //line data
+    var line_data = {
+        labels: date,
+            datasets: [{
+                label: 'popularity',
+                data: parsed_LineData[0],
+                backgroundColor: [
+                    'rgba(255, 206, 86, 0.3)'
+                ],
+                borderColor: [
+                    'rgba(255, 204, 62, 1)'
+                ],
+                borderWidth: 1
+            }]
+    }
+
+    var configLine ={
+            type: 'line',
+            data: line_data,
+    }
+
     const configPie = {
         type: 'pie',
         data: data,
@@ -103,7 +133,7 @@
                         // 計算圖表的百分比
                         var total_value = 0
                         for(let i=0; i<4; i++){
-                            total_value += parsed.data[i];
+                            total_value += parsed_data[i];
                         }
                         var percentage = (value / total_value * 100).toFixed(1);
                         return percentage + "%";
@@ -113,6 +143,10 @@
         },
         plugins:[ChartDataLabels]
     };
+
+    var ctxLine = document.getElementById('line_chart');
+    Line_Chart = new Chart(ctxLine,configLine);
+
     var ctxPie = document.getElementById('pie_chart');
     pie_Chart = new Chart(ctxPie,configPie);
 
@@ -121,7 +155,7 @@
         console.log(myText);
 
         // i 篇數
-        for(var i=0; i<1000; i++){
+        for(var i=0; i<parsed.count; i++){
             if(myText == i+1){
                 // find tweet number
                 console.log('exist:'+parsed.twitter[i].id);
@@ -137,13 +171,7 @@
 
     // select id 滾動的piexl計算
     var scroller = document.querySelector("#timeline");
-    // scroller.addEventListener("scroll", (event) => {
-    //     console.log("滾動:"+scroller.scrollTop);
-    // });
 
-    function topFunction() {
-        scroller.scrollTop = 0;
-    }
     // 篇數 抓article的id
     function scrolltoTweet(num){
         var element = document.getElementById('tweet_' + num);

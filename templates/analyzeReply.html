@@ -36,7 +36,7 @@
                         </article>
                     </div>
                     <div class="timeline" id='timeline' style="overflow:auto; overflow-x: hidden">
-                        {% for i in range(1, 50) %}
+                        {% for i in range(1, data.count) %}
                             <article id="tweet_{{i+1}}">
                                 <h3 id="{{data.twitter[i].username}}"></h3>
                                 <span><b>Tweet by:{{data.twitter[i].name}}</b></span>
