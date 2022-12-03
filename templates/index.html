@@ -6,14 +6,112 @@
     <link rel="stylesheet" href="../static/index_setting.css">
 </head>
 <body style="background-color:#658bb2">
-<form action="" method="post">
-    <div class="Container" style="color:#ffffff">
-        <p>Twitter username:</p>
-        <div class="inputBox">
-            <input type="text" name="id" class="username" placeholder="@Somebody">
-            <input type="submit" name="submit">
+    <div class="Container" >
+        <!-- input  -->
+        <form action="" method="post">
+            <div class="inputBox" style="color: rgb(0, 0, 0)">
+                <h2 style="color:#ffffff">Twitter Search:</h2>
+                <input name="userInput" type="text"  class="username" id="input_hint" placeholder= "@Somebody">
+                <button type="submit" class="index_button">提交</button>
+            </div>
+
+            <div class="func_select" style="color: rgb(255, 255, 255);">
+                <input type="radio" id="id" name="func_select" value="id" onclick="changeFunc()" >
+                <label for="id">Username</label>
+                <input type="radio" id="keyword" name="func_select" value="keyword" onclick="changeFunc()">
+                <label for="keyword">Keyword</label>
+                <input type="radio" id="reply" name="func_select"  value="reply" onclick="changeFunc()">
+                <label for="reply">Reply</label>
+            </div>
+        </form>
+
+        <!-- find people link to test.html -->
+        <div class="id_container" id="id_container">
+            <div class="explain_block">
+                <h2>How does Username work</h2>
+                <p>使用Twitter Api 查詢<strong>公開</strong>的推特數據來確認其他人與你的互動多寡</p><br>
+                <p>它會獲取你最近<strong>7天內的推文(至多50篇)</strong>推文以及其中的喜歡、留言和轉推來計算你與每個人的互動次數並打分數。</p><br>
+                <table class="scoreboard">
+                    <tr>
+                        <th>Interaction</th>
+                        <th>Score</th>
+                    </tr>
+                    <tbody>
+                        <tr>
+                            <th>喜歡</th>
+                            <th>1</th>
+                        </tr>
+                        <tr>
+                            <th>轉推</th>
+                            <th>1</th>
+                        </tr>
+                        <tr>
+                            <th>留言</th>
+                            <th>2</th>
+                        </tr>
+                    </tbody>
+                </table>
+                <br><p>查詢的帳號會處在最中心，而其他所有人會依照得分被分類成圈，得分前10位在第一圈，第11位到30位在第二圈，後三十位在第三圈。</p>
+                <p>點擊情緒按鈕將顯示最近推文的情緒最多的為何種顏色</p><br>
+                <p>接著獲取這些人7天內發的所有推文，並透過訓練好的情緒分類器<br>進行分類。並按照情緒的多寡改變頭像外框顏色。</p><br>
+
+                <p>此外點擊頭像會顯示詳細資料可以看到7天情緒變化的折線圖以及情緒統計的圓餅圖，也可以看到其他人在7天內對你的喜歡、轉推和留言的數量。</p><br>
+
+            </div>
         </div>
+
+        <!-- keyword link to serchWord.html -->
+        <div class="keyword_container_hidden" id="keyword_container">
+            <div class="explain_block">
+                <h2>How does Keyword work</h2>
+                <p>使用Twitter Api 查詢<strong>公開</strong>的推特數據</p><br>
+                <p>輸入關鍵字後會去找此關鍵字的<strong>近1000篇推文的原始推文</strong>，原始推文表示此推文不是轉推、留言或引用轉推，而是使用者所發的推文。
+                    接著再對這1000篇推文進行情緒分析<br>
+                    下一頁將顯示關鍵字查詢到的推文內文，和分析出來的情緒的折線圖以及統計的圓餅圖
+                </p>
+
+            </div>
+        </div>
+
+        <div class="reply_container_hidden" id="reply_container">
+            <div class="explain_block">
+                <h2>How does Reply work</h2>
+                <p>使用Twitter Api 查詢<strong>公開</strong>的推特數據</p><br>
+                <p>輸入你想要分析的推文網址，接著將會抓取這篇推文當中的<strong>所有回覆<br>以及引用轉推</strong>並對這些回覆進行情緒分析<br>
+                    下一頁將顯示回覆內文，和情緒的折線圖以及統計的圓餅圖
+                </p>
+
+            </div>
+        </div>
+
     </div>
-</form>
 </body>
+<script>
+    function changeFunc(){
+
+        var selector = document.querySelector('input[name="func_select"]:checked').value;
+        console.log(selector);
+
+        // 當選到 id
+        if(selector == "id"){
+            document.getElementById("id_container").className = "id_container";
+            document.getElementById("keyword_container").className = "keyword_container_hidden";
+            document.getElementById("reply_container").className = "reply_container_hidden";
+            document.getElementById("input_hint").placeholder= "@Somebody";
+        }
+        else if(selector == "keyword"){
+            document.getElementById("id_container").className = "id_container_hidden";
+            document.getElementById("keyword_container").className = "keyword_container";
+            document.getElementById("reply_container").className = "reply_container_hidden";
+            document.getElementById("input_hint").placeholder= "Input Word";
+        }
+        else if(selector == "reply"){
+            document.getElementById("id_container").className = "id_container_hidden";
+            document.getElementById("keyword_container").className = "keyword_container_hidden";
+            document.getElementById("reply_container").className = "reply_container";
+            document.getElementById("input_hint").placeholder= "Input Tweet URL";
+        }
+
+    }
+</script>
 </html>

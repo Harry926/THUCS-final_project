@@ -8,16 +8,41 @@
 
     <!-- css -->
     <link href="{{ url_for('static',filename='concertric.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static',filename='detailPage_arrange.css') }} " rel="stylesheet">
+    <!-- <link href="{{ url_for('static',filename='li_hover.css') }}" rel="stylesheet"> -->
+
+    <!-- font awesome for icon -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- chart.js -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 </head>
 <body>
     <!-- 關係的圓圈 第二頁 -->
     <div class="container" id="main_container">
+
         <div class="left_side">
             <div class="circle" >
+
                 <div class="circle2" >
-                    {% for key in range(0,15) %}
-                        <p><img id="color{{key}}" src ="{{data.twitter[key].url}}" onclick="openDetailPage('{{data.twitter[key].id}}')"></p>
+                    {% for key in range(0,data.people) %}
+                        <!-- 留10 -->
+                        {% if key < data.people-51 %}
+                            {% set deg = 360 / 10 * key %}
+                            <p><img style="transform: rotate({{deg}}deg) translate(9em) rotate(-{{deg}}deg)" id = "color{{key}}" src ="{{data.twitter[key].url}}" onclick="openDetailPage('{{data.twitter[key].id}}')"></p>
+
+                            <!-- 這邊要留30 ex:61-31  -->
+                        {% elif key < data.people -31 %}
+                            {% set deg = 360 / 20 * key %}
+                            <p><img style="transform: rotate({{deg}}deg) translate(18em) rotate(-{{deg}}deg)" width="4em" height="4em" id = "color{{key}}" src ="{{data.twitter[key].url}}" onclick="openDetailPage('{{data.twitter[key].id}}')"></p>
+
+                        {% elif key < data.people-1 %}
+                            {% set deg = 360 / 30 * key %}
+                            <p><img style="transform: rotate({{deg}}deg) translate(26em) rotate(-{{deg}}deg)" width="3.5em" height="3.5em" id = "color{{key}}" src ="{{data.twitter[key].url}}" onclick="openDetailPage('{{data.twitter[key].id}}')"></p>
+
+                        {% endif %}
+                        <p><img id = "color{{key}}" src ="{{data.twitter[key].url}}" onclick="openDetailPage('{{data.twitter[key].id}}')"></p>
                     {%endfor%}
                 </div>
             </div>
@@ -26,61 +51,129 @@
         <div class="right_side">
             <div class="tab">
                 <input type="checkbox" name="instruction" id="instruction">
+
                 <label for="instruction">
-                    <h2>使用說明</h2>
+                    <h2>Customize</h2>
                 </label>
-                <div class="content">
-                    <p>使用說明文字測試測試<br>換行測試<br></p>
+                <div class="username">
+                    <p>開心:黃色<br>生氣:紅色<br>難過:藍色<br>中立:灰色<br></p>
+
+                    <!-- 選顏色的input -->
+                    <input class="no-appereance" type="color" value="#ff0000" action="changeRingColor()" id="colorPicker">
+                    <!-- <input type="button" onclick="updateRingColor()" value="情緒按鈕"> -->
+                    <button type="button" onclick="updateRingColor()" class="hp_button" >情緒按鈕</button>
                 </div>
-                <!-- 選顏色的input -->
-                <input class="no-appereance" type="color" value="#ff0000" action="changeRingColor()" id="colorPicker">
-                <input type="button" onclick="updateRingColor()" value="mood color">
             </div>
 
             <div class="tab">
                 <input type="checkbox" name="order1" id="order1">
                 <label for="order1">
-                    <h1>Circle1</h1>
+                    <h2>Circle1</h2>
                 </label>
                 <div class="username">
-                    {% for key in range(0,6) %}
-                        <li>{{data.twitter[key].username}}</li><br>
+                    {% for key in range(0,data.people-51) %}
+                        <li><a href="http://twitter.com/{{data.twitter[key].username}}" target="_blank">{{data.twitter[key].username}}</a></li><br>
                     {%endfor%}
                 </div>
             </div>
 
+            <!-- 修改test UI時要注意 -->
             <div class="tab">
                 <input type="checkbox" name="order2" id="order2">
                 <label for="order2">
-                    <h1>Circle2</h1>
+                    <h2>Circle2</h2>
                 </label>
-                <div class="username">
-                    {% for key in range(6,14) %}
-                        <li>{{data.twitter[key].username}}</li><br>
+                <div class="username" style="overflow:auto; height:400px;">
+                    {% for key in range(10, 30) %}
+                        <li><a href="http://twitter.com/{{data.twitter[key].username}}" target="_blank">{{data.twitter[key].username}}</a></li><br>
+                    {%endfor%}
+                </div>
+            </div>
+            <div class="tab">
+                <input type="checkbox" name="order3" id="order3">
+                <label for="order3">
+                    <h2>Circle3</h2>
+                </label>
+                <div class="username" style="overflow:auto; height:400px;">
+                    {% for key in range(30,61) %}
+                        <li><a href="http://twitter.com/{{data.twitter[key].username}}" target="_blank">{{data.twitter[key].username}}</a></li><br>
                     {%endfor%}
                 </div>
             </div>
 
-            <!-- buttom for link to detail page -->
-            <div>
-                <input type="submit" value="Click" onclick="openDetailPage()">
-            </div>
 
         </div>
 
     </div>
-    <!-- 更詳細的內容 -->
+    <!-- 更詳細的內容 第三頁-->
     <div class="detail_container_hidden" id="detail_container">
-        <input type="button" onclick="closeDetailPage()" value="home page">
+
+        <div id="detail_left_side" class="left_side">
+
+            <!-- 頭像 -->
+            <div class="detail_top split_verticall" >
+                <div class="detail_avatar_container split_horizontal">
+                    <img id="detail_avatar" class="detail_avatar" src="">
+                </div>
+
+                <!-- table & 資料 -->
+                <div class="detail_information split_horizontal">
+
+                    <div class="detail_information_text">
+                        <p id="detail_name" class="name_position"></p>
+                        <p id="detail_username" class="name_position"></p>
+                    </div>
+                    <div class="detail_information_table" >
+                        <i class="fa fa-comment " style="color:#896464" aria-hidden="true"><p id="detail_reply"></p></i><br>
+                        <i class="fa fa-heart " style="color:#ff68ae" aria-hidden="true"><p id="detail_liking"></p></i><br>
+                        <i class="fa fa-retweet " style="color:#39AC9C" aria-hidden="true" ><p id="detail_retweet"></p></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 圓餅和折線圖 -->
+            <div class="detail_bottom split_verticall">
+                <div class="flexbox">
+                    <div class="chart_box" style="width: 55%;">
+                        <canvas id="line_chart" ></canvas>
+                    </div>
+                    <div class="chart_box" style="width: 45%;">
+                        <canvas id="pie_chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- 第三頁 id列表 -->
+        <div id="detail_right_side" class="right_side">
+            <button type="button" onclick="closeDetailPage()" class="hp_button" >Home Page</button>
+
+            <div class="detail_tab">
+                <!-- <input type="checkbox" name="instruction2" id="instruction2"> -->
+                <label >
+                    <h2>Order</h2>
+                </label>
+
+                <div class="userheight">
+                    {% for key in range(0,data.people) %}
+                        <li class="btn btn1" onclick="openDetailPage('{{data.twitter[key].id}}')">{{data.twitter[key].username}}</li><br>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </body>
-
 <script>
     var parsed = JSON.parse('{{data.twitter | tojson}}');
+    console.log("json data is " + parsed.length);
+
     var colorInput = document.getElementById("colorPicker");
 
-    // 自由改變照片外框顏色
+    // // 自由改變照片外框顏色
     function changeRingColor(){
         colorInput.addEventListener('input', ()=>{
             let color = colorInput.value;
@@ -88,19 +181,21 @@
                 document.getElementById("color" + i).style.boxShadow ="0 0 0 4px" + color;
             }
         })
+        console.log("changeRingColor work");
     }
 
-    var happyColor = "0 0 0 4px #f3c058";
-    var normalColor = "0 0 0 4px #8fa3fb";
-    var angryColor = "0 0 0 4px #ff586b";
-    var sorrowColor = "0 0 0 4px #d958ff";
+
+    var happyColor = "0 0 0 5px #FFCC3E";
+    var normalColor = "0 0 0 5px #686b73"; //灰
+    var angryColor = "0 0 0 5px #ff586b";
+    var sorrowColor = "0 0 0 5px #47a9ff";
 
     // 依情緒改變照片外框顏色
     function updateRingColor()
     {
         for(var i=0; i < parsed.length; i++)
         {
-            var sentiment =parsed[i]["sentiment"]
+            var sentiment =parsed[i]["sentiment"];
             var boxShadow = "";
             if(sentiment == "happy")
             {
@@ -117,15 +212,161 @@
             }
             document.getElementById("color" + i).style.boxShadow = boxShadow;
         }
+        console.log("updateRingColor work");
     }
 
-    // 關閉第二頁 開啟更詳細的頁面
+
+    // // 關閉第二頁 開啟更詳細的頁面
+    var chartExist = false;
+
     function openDetailPage(id){
         document.getElementById("main_container").className = "container_hidden";
         document.getElementById("detail_container").className = "detail_container";
         console.log(id);
 
+        // 找人
+        var user = null;
+
+        for(i=0;i<parsed.length ;i++){
+            if(id == parsed[i].id){
+                console.log("player found");
+                user = parsed[i];
+            }
+        }
+
+        // 設定詳細資訊
+        if(user != null)
+        {
+            document.getElementById("detail_avatar").src = user.url;
+            document.getElementById("detail_name").innerHTML = "ID: " + user.name;
+            document.getElementById("detail_username").innerHTML ="Username: " + user.username;
+            document.getElementById("detail_liking").innerHTML ="收到的愛心: " + user.liking;
+            document.getElementById("detail_retweet").innerHTML ="收到的轉推: " + user.retweet;
+            document.getElementById("detail_reply").innerHTML ="收到的回覆: " + user.reply;
+
+        }
+        console.log("===")
+
+        var total = [];
+        for (var i = 0; i < user.data.length; i++){
+            var sum = 0;
+            for (let index = 0; index < user.data[i].length; index++) {
+                sum += user.data[i][index];
+            }
+            total.push(sum);
+        }
+        var date = user.data[4];
+
+        drawChart(date);
+        updateChart(user, total);
     }
+
+    let line_Chart = null;
+    let pie_Chart = null;
+
+    function drawChart(date){
+        if(chartExist)
+        {
+            return;
+        }
+        //setup line data
+        var data = {
+            labels: date,
+            datasets: [{
+                label: 'happy',
+                data: [0, 0, 0, 0, 0, 0, 0],
+                backgroundColor: [
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 204, 62, 1)'
+                ],
+                borderWidth: 1
+            },{
+                label:'angry',
+                data: [0, 0, 0, 0, 0, 0, 0],
+                backgroundColor:[
+                    'rgba(255, 26, 104, 0.2)'
+                ],
+                borderColor:[
+                    'rgba(255, 88, 107, 1)'
+
+                ],
+                borderWidth:1
+            },{
+                label:'sorrow',
+                data: [0, 0, 0, 0, 0, 0, 0],
+                backgroundColor:[
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor:[
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth:1
+            },{
+                label:'normal',
+                data: [0, 0, 0, 0, 0, 0, 0],
+                backgroundColor:[
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor:[
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth:1
+            }]
+        };
+
+        // setup2 pie data
+        var data2 = {
+            labels: ['happy','angry', 'sorrow',  'normal'],
+            datasets: [{
+            label: 'pie',
+            data: [1, 1, 1, 1],
+            backgroundColor: [
+                'rgba(255, 206, 86, 0.35)',
+                'rgba(255, 26, 104, 0.35)',
+                'rgba(54, 162, 235, 0.35)',
+                'rgba(75, 192, 192, 0.35)'
+            ],
+            borderColor: [
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(255, 26, 104, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(75, 192, 192, 0.2)'
+            ],
+            borderWidth: 1
+        }]
+        };
+        var ctx = document.getElementById('line_chart');
+        var config ={
+            type: 'line',
+            data: data,
+        }
+        const configPie = {
+            type: 'pie',
+            data: data2,
+        };
+        var ctxPie = document.getElementById('pie_chart');
+
+        line_Chart = new Chart(ctx,config);
+        pie_Chart = new Chart(ctxPie,configPie);
+
+        chartExist = true;
+    }
+
+    function updateChart(user, total){
+        line_Chart.data.datasets[0].data = user.data[0];
+        line_Chart.data.datasets[1].data = user.data[1];
+        line_Chart.data.datasets[2].data = user.data[2];
+        line_Chart.data.datasets[3].data = user.data[3];
+        line_Chart.update();
+
+        pie_Chart.data.datasets[0].data = total;
+        pie_Chart.update();
+
+        console.log("update");
+    };
+
 
     // 開啟第二頁 關閉更詳細的頁面
     function closeDetailPage(){
@@ -135,5 +376,6 @@
 
     updateRingColor();
     changeRingColor();
+
 </script>
 </html>

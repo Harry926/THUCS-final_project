@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweet Reply</title>
+    <!-- css -->
+    <link href="../static/reply_setting.css" rel="stylesheet">
+    <link rel="shortcut icon" href="#"/>
+
+    <!-- chart.js -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- second labels by chartjs plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="nav">
+            <!-- <p style="color: black">輸入:</p>
+            <input type="text" class="nav_input" id="textInput">
+            <button type="submit" class="search_btn" onclick="search()">查詢</button> -->
+        </div>
+
+        <div id="left_side" class="left_side">
+            <div class="tweet_text" >
+                <div class="timeline_title">
+                    <div class="centain_tweet">
+                        <article >
+                            <!-- <h3 id="{{data.twitter[0].username}}">Origin tweet</h3> -->
+                            <h3><b>Tweet by:{{data.twitter[0].name}}</b></h3>
+                            <span style="color: rgb(83, 100, 113);"><a href="http://twitter.com/{{data.twitter[0].username}}" target="_blank">@{{data.twitter[0].username}}</a></span>
+                            <span>Semtiment:{{data.twitter[0].semtiment}}</span>
+                            <p>{{data.twitter[0].text}}</p>
+                        </article>
+                    </div>
+                    <div class="timeline" id='timeline' style="overflow:auto; overflow-x: hidden">
+                        {% for i in range(1, 50) %}
+                            <article id="tweet_{{i+1}}">
+                                <h3 id="{{data.twitter[i].username}}"></h3>
+                                <span><b>Tweet by:{{data.twitter[i].name}}</b></span>
+                                <span style="color: rgb(83, 100, 113);"><a href="http://twitter.com/{{data.twitter[i].username}}" target="_blank">@{{data.twitter[i].username}}</a></span>
+                                <span>Semtiment:{{data.twitter[i].semtiment}}</span>
+                                <p>{{data.twitter[i].text}}</p>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- chart -->
+            <div class="flexbox">
+                <div class="chart_box" >
+                    <canvas id="pie_chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    //現在parsed是json的data值沒有考慮內文
+    var parsed = JSON.parse('{{data.data | tojson}}');
+    console.log('parsed work');
+
+
+    // creat chart
+    var data = {
+        labels: ['happy', 'angry','sorrow',  'normal'],
+        datasets:[{
+        label: 'pie',
+        data: parsed,
+        backgroundColor: [
+            'rgba(255, 206, 86, 0.35)',
+            'rgba(255, 26, 104, 0.35)',
+            'rgba(54, 162, 235, 0.35)',
+            'rgba(75, 192, 192, 0.35)'
+        ],
+        borderColor: [
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(255, 26, 104, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(75, 192, 192, 0.2)'
+        ],
+        borderWidth: 1
+        }]
+
+    };
+    const configPie = {
+        type: 'pie',
+        data: data,
+        options: {
+            scales:{
+            },
+            plugins: {
+                datalabels: {
+                    formatter: (value, context) => {
+                        var total_value = 0
+                        for(let i=0; i<4; i++){
+                            total_value += parsed[i];
+                        }
+                        var percentage = (value / total_value * 100).toFixed(1);
+                        return percentage + "%";
+                    }
+                }
+            }
+        },
+        plugins:[ChartDataLabels]
+    };
+    var ctxPie = document.getElementById('pie_chart');
+    pie_Chart = new Chart(ctxPie,configPie);
+
+
+</script>
+</html>

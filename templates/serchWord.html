@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>serch keyword</title>
+
+    <!-- css -->
+    <!-- css -->
+    <link href="../static/keyword_setting.css" rel="stylesheet">
+
+    <!-- chart.js -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- second labels by chartjs plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="shortcut icon" href="#"/>
+
+    <!-- chart.js -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- second labels by chartjs plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js" integrity="sha512-Tfw6etYMUhL4RTki37niav99C6OHwMDB2iBT5S5piyHO+ltK2YX8Hjy9TXxhE1Gm/TmAV0uaykSpnHKFIAif/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+<body>
+    <div class="container" id="container">
+
+        <div class="nav">
+            <!-- <label for="fname">First name:</label> -->
+            <p style="color: black">輸入:</p>
+            <input type="text" class="nav_input" id="textInput">
+            <button type="submit" class="search_btn" onclick="search()">查詢</button>
+        </div>
+
+        <div id="left_side" class="left_side">
+            <div class="tweet_text" >
+                <div class="timeline_title">
+                    <h2>Tweets Keyword: {{data.keyword}}   </h2>
+                </div>
+
+                <div class="timeline" id='timeline' style="overflow:auto; overflow-x: hidden">
+                    <!-- 篇數號碼是用迴圈變數 -->
+                    {% for i in range(0, 1000) %}
+                        <article id="tweet_{{i+1}}">
+                            <h3 id="{{data.twitter[i].username}}"><a href="http://twitter.com/Twitter/status/{{data.twitter[i].id}}" target="_blank">{{i+1}}. Tweet id:{{data.twitter[i].id}}</a></h3>
+                            <span><b>Tweet by:{{data.twitter[i].name}}</b></span>
+                            <span style="color: rgb(83, 100, 113);"><a href="http://twitter.com/{{data.twitter[i].username}}" target="_blank">@{{data.twitter[i].username}}</a></span>
+                            <span>Semtiment:{{data.twitter[i].semtiment}}</span>
+                            <p>{{data.twitter[i].text}}</p>
+                        </article>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- chart -->
+            <div class="flexbox">
+                <div class="chart_box" >
+                    <canvas id="pie_chart"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script>
+    // ensure data parsed
+    var parsed = JSON.parse('{{data | tojson}}');
+    console.log('parsed work');
+
+    // creat chart
+    var data = {
+        labels: ['happy','angry', 'sorrow',  'normal'],
+        datasets:[{
+        label: 'pie',
+        data: parsed.data,
+        backgroundColor: [
+            'rgba(255, 206, 86, 0.35)',
+            'rgba(255, 26, 104, 0.35)',
+            'rgba(54, 162, 235, 0.35)',
+            'rgba(75, 192, 192, 0.35)'
+        ],
+        borderColor: [
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(255, 26, 104, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(75, 192, 192, 0.2)'
+        ],
+        borderWidth: 1
+        }]
+
+    };
+    const configPie = {
+        type: 'pie',
+        data: data,
+        options: {
+            scales:{
+            },
+            plugins: {
+                datalabels: {
+                    formatter: (value, context) => {
+                        // console.log(value);  // 95 7 20 27
+                        // 計算圖表的百分比
+                        var total_value = 0
+                        for(let i=0; i<4; i++){
+                            total_value += parsed.data[i];
+                        }
+                        var percentage = (value / total_value * 100).toFixed(1);
+                        return percentage + "%";
+                    }
+                }
+            }
+        },
+        plugins:[ChartDataLabels]
+    };
+    var ctxPie = document.getElementById('pie_chart');
+    pie_Chart = new Chart(ctxPie,configPie);
+
+    function search(){
+        var myText = document.getElementById('textInput').value;
+        console.log(myText);
+
+        // i 篇數
+        for(var i=0; i<1000; i++){
+            if(myText == i+1){
+                // find tweet number
+                console.log('exist:'+parsed.twitter[i].id);
+                scrolltoTweet(myText);
+            }
+            else if(myText == parsed.twitter[i].username){
+                // find tweet username
+                console.log('exist:'+parsed.twitter[i].id);
+                scrolltoUsername(myText);
+            }
+        }
+    }
+
+    // select id 滾動的piexl計算
+    var scroller = document.querySelector("#timeline");
+    // scroller.addEventListener("scroll", (event) => {
+    //     console.log("滾動:"+scroller.scrollTop);
+    // });
+
+    function topFunction() {
+        scroller.scrollTop = 0;
+    }
+    // 篇數 抓article的id
+    function scrolltoTweet(num){
+        var element = document.getElementById('tweet_' + num);
+        element.scrollIntoView();
+        console.log("滾動pixel:"+scroller.scrollTop);
+    }
+    function scrolltoUsername(username){
+        // 抓username 抓h3 tag id
+        var element = document.getElementById(username);
+        element.scrollIntoView();
+    }
+
+    document.getElementById("textInput").placeholder = "Tweets number or @Someone";
+
+
+</script>
+</html>
